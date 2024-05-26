@@ -29,11 +29,28 @@ const SignUpForm = () => {
         }
     })
 
-    const onSubmit = (values: z.infer<typeof formSchema>) => {
+    const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
-            
+            const response = await fetch('/api/auth/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type' : 'application/json',
+                },
+                body: JSON.stringify({
+                  email: values.email,
+                  password: values.password
+                }) 
+            })
+
+            if(!response.ok) {
+                throw new Error('Failed to sign up')
+            }
+
+            const data = await response.json();
+            console.log(data);
+
         } catch (error) {
-            
+            console.error(error);
         }
     }
 
@@ -59,9 +76,9 @@ const SignUpForm = () => {
           name='password'
           render={({field}) => (
             <FormItem>
-              <FormLabel className='text-md'>Enter Valid Email</FormLabel>
+              <FormLabel className='text-md'>Create Password </FormLabel>
               <FormControl>
-                <Input type='password' placeholder='Create a Password' className='bg-transparent placeholder:text-secondary-muted' {...field} />
+            <Input type='password' placeholder='Password' className='bg-transparent placeholder:text-secondary-muted' {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

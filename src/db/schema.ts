@@ -1,13 +1,14 @@
 import { pgTable, serial, text, timestamp, integer, boolean, jsonb } from 'drizzle-orm/pg-core';
+import { Updock } from 'next/font/google';
 
-export const userModel = pgTable('users', {
+export const userModel = pgTable('user', {
   id: serial('id').primaryKey(),
   email: text('email').notNull().unique(),
   password: text('password').notNull(),
   createdAt: timestamp('created_at').defaultNow(),
 });
 
-export const userAccountModel = pgTable('user_accounts', {
+export const userAccountModel = pgTable('user_account', {
   id: serial('id').primaryKey(),
   userId: integer('user_id').references(() => userModel.id).notNull(),
   profilePicture: text('profile_picture'),

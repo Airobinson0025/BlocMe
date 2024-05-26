@@ -1,4 +1,4 @@
-import db from './config';
+import db from './db';
 import { userAccountModel } from './schema';
 import { userModel } from './schema';
 
