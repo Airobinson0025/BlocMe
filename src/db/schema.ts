@@ -1,5 +1,4 @@
 import { pgTable, serial, text, timestamp, integer, boolean, jsonb } from 'drizzle-orm/pg-core';
-import { Updock } from 'next/font/google';
 
 export const userModel = pgTable('user', {
   id: serial('id').primaryKey(),

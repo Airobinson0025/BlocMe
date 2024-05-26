@@ -7,6 +7,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Input } from '../ui/input'
 import Link from 'next/link'
+import { signIn } from 'next-auth/react'
 
 const formSchema = z.object({
     email: z.string().min(1, 'Email is required').email('Invalid email'),
@@ -25,8 +26,19 @@ const SignInForm = () => {
 ''        }
     })
 
-    const onSubmit = (values: z.infer<typeof formSchema>) => {
-        console.log(values)
+    const onSubmit = async (values: z.infer<typeof formSchema>) => {
+        const result = await signIn('credentials', {
+            redirect: false,
+            email: values.email,
+            password: values.password
+        });
+
+        if (result?.error) {
+            form.setError('email', { message: 'Invalid email or password' })
+            console.error(result.error)
+        } else {
+          console.log('Signed in successfully')
+        }
     }
 
   return (
@@ -62,11 +74,6 @@ const SignInForm = () => {
         
         <Button variant='secondary' type='submit' className='w-full'>Sign In</Button>
         </form>
-        {/* <div className='mx-auto my-4 flex w-full items-center justify-evenly before:mr-4 before:block before:h-px before:flex-grow before:bg-stone-400 after:ml-4 after:block after:h-px after:flex-grow after:bg-stone-400 text-secondary'>or</div>
-        <Button className='bg-secondary-foreground w-full'>Sign In with Your Wallet</Button>
-        <p className='text-center text-sm text-secondary mt-2'>If you don&apos;t have an account, please&nbsp;
-          <Link className='text-secondary underline transition duration-200' href='/sign-up'>Sign up</Link>
-        </p> */}
     </Form>
   )
 }
