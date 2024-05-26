@@ -8,6 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Input } from '../ui/input'
 import Link from 'next/link'
 import { signIn } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 
 const formSchema = z.object({
     email: z.string().min(1, 'Email is required').email('Invalid email'),
@@ -17,6 +18,8 @@ const formSchema = z.object({
 
 
 const SignInForm = () => {
+
+  const router = useRouter()
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -37,6 +40,7 @@ const SignInForm = () => {
             form.setError('email', { message: 'Invalid email or password' })
             console.error(result.error)
         } else {
+          router.push('/dashboard')
           console.log('Signed in successfully')
         }
     }
